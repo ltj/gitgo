@@ -12,9 +12,12 @@ if [[ "$OSTYPE" = darwin* ]] ; then
 			else
 				final=$(sed -e 's_:_/_' -e 's_git@_https://_' -e 's_\.git__' <<< "$url")
 			fi
-			if [[ $1 == "pr" ]]; then
+			if [[ $1 == "comp" ]]; then
 			 	open "$final$PRPATH"
-			 else
+			elif [[ $1 == "pr" ]]; then
+				branch="$(git rev-parse --abbrev-ref HEAD)"
+				open "$final$PRPATH/$branch?expand=1"
+			else
 			 	open "$final"
 			fi
 		else
@@ -23,6 +26,7 @@ if [[ "$OSTYPE" = darwin* ]] ; then
 	}
 
 	alias ghg='gitgo'
+	alias ghc='gitgo comp'
 	alias ghp='gitgo pr'
 
 fi
