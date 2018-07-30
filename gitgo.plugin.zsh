@@ -1,27 +1,30 @@
 #!/bin/zsh
 
-PRPATH="/compare"
-
 if [[ "$OSTYPE" = darwin* ]] ; then
 
 	function gitgo() {
+		local PRPATH="/compare"
+		local url
+		local finalurl
+		local branch
+
 		if [[ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" ]]; then
 			url="$(git remote get-url origin)"
 			if [[ $url = *"https"* ]]; then
-				final=$(sed 's_\.git__' <<< "$url")
+				finalurl=$(sed 's_\.git__' <<< "$url")
 			else
-				final=$(sed -e 's_:_/_' -e 's_git@_https://_' -e 's_\.git__' <<< "$url")
+				finalurl=$(sed -e 's_:_/_' -e 's_git@_https://_' -e 's_\.git__' <<< "$url")
 			fi
 			if [[ $1 == "comp" ]]; then
-			 	open "$final$PRPATH"
+			 	open "$finalurl$PRPATH"
 			elif [[ $1 == "pr" ]]; then
 				branch="$(git rev-parse --abbrev-ref HEAD)"
-				open "$final$PRPATH/$branch?expand=1"
+				open "$finalurl$PRPATH/$branch?expand=1"
 			else
-			 	open "$final"
+			 	open "$finalurl"
 			fi
 		else
-			echo 'Sorry. The current directory is not inside a git work tree'
+			echo 'Sorry. The current directory is not inside a git work tree.'
 		fi
 	}
 
