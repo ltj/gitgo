@@ -1,5 +1,5 @@
 # gitgo
-A small plugin for oh-my-zsh to launch Github/Gitlab repository from the command line. It will open the URLs using you default browser using the MacOS X `open` command. Hence, only Mac OS is currently suported.
+A small plugin for oh-my-zsh to launch Github/Gitlab repository from the command line. It will open the URLs using you default browser using the MacOS X `open` command or the common Linux `xdg-open` command. Hence, only Mac OS and Linux is currently suported.
 
 ## Disclaimer
 This little script was coded at my leisure only to bring some convenience to my daily workflow. It comes with absolutely no guarantees. 
