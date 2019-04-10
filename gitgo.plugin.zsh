@@ -6,22 +6,29 @@ if [[ "$OSTYPE" = darwin* ]] || [[ "$OSTYPE" = linux* ]] ; then
 		function gitgo() {
 			local PRPATH="/compare"
 			local OPEN
+			local EREGEX
 			local url
 			local finalurl
 			local branch
 
 			if [[ "$OSTYPE" = darwin* ]] ; then
 				OPEN=open
+				EREGEX=-E
 			else
 				OPEN=xdg-open
+				EREGEX=-r
 			fi
 
 			if [[ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" ]]; then
 				url="$(git remote get-url origin)"
-				if [[ $url = *"https"* ]]; then
-					finalurl=$(sed 's_\.git__' <<< "$url")
+				if [[ $url = *"visualstudio"* ]]; then
+					finalurl=$(sed "$EREGEX" -e 's_:_/_' -e 's_([a-z]+)@vs-ssh_https://\1_' -e 's_\.git__' -e 's_v3/__' -e 's_com/[^/]+_com_' -e 's_([^/]+)$_\_git/\1_' <<< "$url")
 				else
-					finalurl=$(sed -e 's_:_/_' -e 's_git@_https://_' -e 's_\.git__' <<< "$url")
+					if [[ $url = *"https"* ]]; then
+						finalurl=$(sed 's_\.git__' <<< "$url")
+					else
+						finalurl=$(sed -e 's_:_/_' -e 's_git@_https://_' -e 's_\.git__' <<< "$url")
+					fi
 				fi
 				if [[ $1 == "comp" ]]; then
 				 	$OPEN "$finalurl$PRPATH"
