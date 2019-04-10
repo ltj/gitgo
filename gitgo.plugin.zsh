@@ -7,6 +7,7 @@ if [[ "$OSTYPE" = darwin* ]] || [[ "$OSTYPE" = linux* ]] ; then
 			local PRPATH="/compare"
 			local OPEN
 			local EREGEX
+			local VS
 			local url
 			local finalurl
 			local branch
@@ -22,8 +23,10 @@ if [[ "$OSTYPE" = darwin* ]] || [[ "$OSTYPE" = linux* ]] ; then
 			if [[ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" ]]; then
 				url="$(git remote get-url origin)"
 				if [[ $url = *"visualstudio"* ]]; then
+					VS=true
 					finalurl=$(sed "$EREGEX" -e 's_:_/_' -e 's_([a-z]+)@vs-ssh_https://\1_' -e 's_\.git__' -e 's_v3/__' -e 's_com/[^/]+_com_' -e 's_([^/]+)$_\_git/\1_' <<< "$url")
 				else
+					VS=false
 					if [[ $url = *"https"* ]]; then
 						finalurl=$(sed 's_\.git__' <<< "$url")
 					else
@@ -34,7 +37,11 @@ if [[ "$OSTYPE" = darwin* ]] || [[ "$OSTYPE" = linux* ]] ; then
 				 	$OPEN "$finalurl$PRPATH"
 				elif [[ $1 == "pr" ]]; then
 					branch="$(git rev-parse --abbrev-ref HEAD)"
-					$OPEN "$finalurl$PRPATH/$branch?expand=1"
+					if [[ "$VS" = true ]]; then
+						$OPEN "$finalurl/pullrequestcreate?sourceRef=$branch&targetRef=master" 
+					else
+						$OPEN "$finalurl$PRPATH/$branch?expand=1"
+					fi
 				else
 				 	$OPEN "$finalurl"
 				fi
