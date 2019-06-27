@@ -22,7 +22,7 @@ if [[ "$OSTYPE" = darwin* ]] || [[ "$OSTYPE" = linux* ]] ; then
 
 			if [[ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" ]]; then
 				url="$(git remote get-url origin)"
-				if [[ $url = *"visualstudio.com"* ]] || [[ $url = *"azure.com"]] ; then
+				if [[ $url = *"visualstudio.com"* ]] || [[ $url = *"azure.com"* ]] ; then
 					VS=true
 					finalurl=$(sed "$EREGEX" -e 's_:_/_' -e 's|.*@.+:.+/([a-z]+)/(.+)/(.+)|https://\1\.visualstudio.com/\2/_git/\3|' <<< "$url")
 				else
