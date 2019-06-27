@@ -24,7 +24,7 @@ if [[ "$OSTYPE" = darwin* ]] || [[ "$OSTYPE" = linux* ]] ; then
 				url="$(git remote get-url origin)"
 				if [[ $url = *"visualstudio.com"* ]] || [[ $url = *"azure.com"* ]] ; then
 					VS=true
-					finalurl=$(sed "$EREGEX" -e 's_:_/_' -e 's|.*@.+:.+/([a-z]+)/(.+)/(.+)|https://\1\.visualstudio.com/\2/_git/\3|' <<< "$url")
+					finalurl=$(sed "$EREGEX" -e 's|.*@.+:.+/([a-z]+)/(.+)/(.+)|https://\1\.visualstudio.com/\2/_git/\3|' <<< "$url")
 				else
 					VS=false
 					if [[ $url = *"https"* ]]; then
