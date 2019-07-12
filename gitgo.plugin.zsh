@@ -34,7 +34,8 @@ if [[ "$OSTYPE" = darwin* ]] || [[ "$OSTYPE" = linux* ]] ; then
 					fi
 				fi
 				if [[ $1 == "comp" ]]; then
-				 	$OPEN "$finalurl$PRPATH"
+					branch="$(git rev-parse --abbrev-ref HEAD)"
+				 	$OPEN "$finalurl$PRPATH/master...$branch"
 				elif [[ $1 == "pr" ]]; then
 					branch="$(git rev-parse --abbrev-ref HEAD)"
 					if [[ "$VS" = true ]]; then
